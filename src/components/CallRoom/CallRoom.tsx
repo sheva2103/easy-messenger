@@ -10,6 +10,8 @@ import MicMute from '../../assets/mic-mute-fill.svg'
 import MicOn from '../../assets/mic-fill.svg'
 import VolumeOn from '../../assets/volume-down-fill.svg'
 import VolumeMute from '../../assets/volume-mute-fill.svg'
+import MinimizedIcon from '../../assets/minimized.svg'
+import CallWidgetPortal from './CallWidget';
 
 
 
@@ -17,13 +19,13 @@ const ShowCallerName: FC<{ id: string }> = ({ id }) => {
     const [name, setName] = useState('')
 
     useEffect(() => {
-        if(id) {
+        if (id) {
             profileAPI.getCurrentInfo(id)
-            .then(data => setName(data.displayName))
-            .catch(err => {
-                console.log(err)
-                setName('Неизвестно')
-            })
+                .then(data => setName(data.displayName))
+                .catch(err => {
+                    console.log(err)
+                    setName('Неизвестно')
+                })
         }
     }, [id])
 
@@ -34,21 +36,48 @@ const ShowCallerName: FC<{ id: string }> = ({ id }) => {
     )
 }
 
-export const CallRoom = ({ myUid, calleeUid, endCallFunc, startCallFunc }: { 
-    myUid: string, 
-    calleeUid: string, 
+export const CallRoom = ({ myUid, calleeUid, endCallFunc, startCallFunc, toggleMinimize, isMinimized }: {
+    myUid: string,
+    calleeUid: string,
     endCallFunc?: (callDuration: string, status: CallEndStatus) => void,
     startCallFunc: (mode: "incoming" | "outgoing") => void
-    }) => {
+    toggleMinimize: (e: React.MouseEvent) => void
+    isMinimized: boolean
+}) => {
     const { callState, errorMessage, callDuration, callerUid,
         startCall, acceptCall, rejectCall, endCall, formatDuration,
         remoteAudioRef, ringtoneRef, incomingRef,
-        isMicMuted, isSpeakerMuted, toggleMic, toggleSpeaker} = useWebRTCCall(myUid, calleeUid, startCallFunc, endCallFunc)
+        isMicMuted, isSpeakerMuted, toggleMic, toggleSpeaker } = useWebRTCCall(myUid, calleeUid, startCallFunc, endCallFunc)
 
-    const {t} = useTypedTranslation()
+    const { t } = useTypedTranslation()
+
+    const connectedButtons = (
+        <>
+            {callState === 'connected' &&
+                <div className={styles.buttons__settings} onClick={toggleSpeaker}>
+                    {isSpeakerMuted ? <VolumeMute fontSize={'1.7rem'} /> : <VolumeOn fontSize={'1.7rem'} />}
+                </div>
+            }
+            <button onClick={endCall} style={{ backgroundColor: 'hsl(0, 98%, 64%)' }}>{t('call.reject')}</button>
+            {callState === 'connected' &&
+                <div className={styles.buttons__settings} onClick={toggleMic}>
+                    {isMicMuted ? <MicMute fontSize={'1.3rem'} /> : <MicOn fontSize={'1.3rem'} />}
+                </div>
+            }
+        </>
+    )
 
     return (
-        <div className={styles.wrapper}>
+        <div className={styles.wrapper} style={{ display: 'flex', flexDirection: 'column' }}>
+            {callState === 'connected' &&
+                <div className={styles.minimized}>
+                    <MinimizedIcon
+                        fontSize={'1.2rem'}
+                        role='button'
+                        onClick={toggleMinimize}
+                    />
+                </div>
+            }
             <h4 className={styles.callState}>
                 {
                     callState === 'idle' ? t('call.idle') :
@@ -65,7 +94,7 @@ export const CallRoom = ({ myUid, calleeUid, endCallFunc, startCallFunc }: {
                         t(`call.errorMicro`)
                         :
                         errorMessage
-                    }    
+                    }
                 </p>}
 
             <ShowCallerName id={callerUid ? callerUid : calleeUid} />
@@ -80,7 +109,7 @@ export const CallRoom = ({ myUid, calleeUid, endCallFunc, startCallFunc }: {
             <audio ref={ringtoneRef} src={calling} loop />
             <audio ref={incomingRef} src={ringtone} loop />
 
-            
+
 
             <div className={styles.buttons}>
                 {callState === 'idle' && (
@@ -95,21 +124,12 @@ export const CallRoom = ({ myUid, calleeUid, endCallFunc, startCallFunc }: {
                 )}
 
                 {(callState === 'connected' || callState === 'calling') && (
-                    <>
-                        {callState === 'connected' &&
-                            <div className={styles.buttons__settings} onClick={toggleSpeaker}>
-                                {isSpeakerMuted ? <VolumeMute fontSize={'1.7rem'}/> : <VolumeOn fontSize={'1.7rem'}/>}
-                            </div>
-                        }
-                        <button onClick={endCall} style={{ backgroundColor: 'hsl(0, 98%, 64%)' }}>{t('call.reject')}</button>
-                        {callState === 'connected' &&
-                            <div className={styles.buttons__settings} onClick={toggleMic}>
-                                {isMicMuted ? <MicMute fontSize={'1.3rem'}/> : <MicOn fontSize={'1.3rem'}/>}
-                            </div>
-                        }
-                    </>
+                    connectedButtons
                 )}
             </div>
+            {isMinimized && <CallWidgetPortal toggleMinimize={toggleMinimize}>
+                {connectedButtons}
+            </CallWidgetPortal>}
         </div>
     );
 };

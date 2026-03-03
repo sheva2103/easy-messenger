@@ -14,6 +14,10 @@ html[data-theme="dark"] {
     --color-preview-message: #979797;
     --color-svg: #393b3d;
     --bg-color-button: #8674e1af;
+    --glass-bg: rgba(20, 20, 20, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --glass-highlight: rgba(255, 255, 255, 0.25);
+    --glass-bg-hover: rgba(40, 40, 40, 0.7);
 }
 
 html[data-theme="light"] {
@@ -32,13 +36,17 @@ html[data-theme="light"] {
     --purple-color: rgb(135, 116, 225);
     --color-preview-message: #919191;
     --color-svg: #ffffff;
-    --bg-color-button: #8774e1; 
+    --bg-color-button: #8774e1;
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    --glass-border: rgba(0, 0, 0, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.4);
+    --glass-bg-hover: rgba(255, 255, 255, 0.75);
 }
 
 :root {
-    --glass-bg: rgba(20, 20, 20, 0.6); /* тёмный прозрачный фон */
-    --glass-border: rgba(255, 255, 255, 0.15);
-    --glass-highlight: rgba(255, 255, 255, 0.25);
+    // --glass-bg: rgba(20, 20, 20, 0.6);
+    // --glass-border: rgba(255, 255, 255, 0.15);
+    // --glass-highlight: rgba(255, 255, 255, 0.25);
     --text-color: #e0e0e0;
     --accent-color: #4db5ff;
 }

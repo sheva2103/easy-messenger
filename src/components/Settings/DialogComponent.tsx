@@ -8,7 +8,8 @@ import stylesContacts from '../Contacts/Contacts.module.scss'
 type Props = {
     children: ReactElement
     isOpen: boolean,
-    onClose: (value: boolean) => void
+    onClose: (value: boolean) => void,
+    isMinimized?: boolean
 }
 
 type ConfirmProps = {
@@ -63,16 +64,15 @@ export const LayoutDialogList: FC<{children: ReactElement}> = ({children}) => {
     )
 }
 
-const DialogComponent: FC<Props> = ({children, onClose, isOpen}) => {
+const DialogComponent: FC<Props> = ({children, onClose, isOpen, isMinimized}) => {
 
     const handleClose = (e: React.MouseEvent) => {
-        // e.stopPropagation() !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1 
         e.stopPropagation()
         onClose(false);
     };
 
     return (  
-        <Dialog onClose={handleClose} open={isOpen} classes={{paper: dialogStyle}}>
+        <Dialog onClose={handleClose} open={isOpen} classes={{paper: dialogStyle}} sx={{display: isMinimized ? 'none' : 'block'}}>
             <div className={styles.close}><CloseMenuIcon cursor={'pointer'} fontSize={'1.3rem'} onClick={handleClose}/></div>
             {cloneElement(children, { handleClose })}
         </Dialog>

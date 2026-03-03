@@ -1,5 +1,5 @@
 import { doc, DocumentData, onSnapshot } from "firebase/firestore";
-import { FC, useEffect, useRef } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { db } from "../../firebase";
 import { useAppDispatch, useAppSelector } from "../../hooks/hook";
 import { closeModalCalls, openModalCalls, setStatusMod } from "../../store/slices/callsSlice";
@@ -16,8 +16,10 @@ const CallsListenerComponent: FC = () => {
     const myUid = useAppSelector(state => state.app.currentUser.uid)
     const callerUid = useAppSelector(state => state.calls.callerUid)
     const messageInfo = useAppSelector(state => state.calls.callInfo)
+    const [isMinimized, setIsMinimized] = useState(false)
 
     const close = (click?: boolean) => {
+        setIsMinimized(false)
         dispatch(closeModalCalls(click))
     }
 
@@ -32,6 +34,11 @@ const CallsListenerComponent: FC = () => {
 
     const startCallFunc = (mode: "incoming" | "outgoing") => {
         dispatch(setStatusMod(mode))
+    }
+
+    const toggleMinimize = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        setIsMinimized(prev => !prev)
     }
 
     useEffect(() => {
@@ -57,8 +64,15 @@ const CallsListenerComponent: FC = () => {
 
     return ( 
         <div className={styles.container}>
-            <DialogComponent isOpen={isOpen} onClose={() => close(true)}>
-                <CallRoom myUid={myUid} calleeUid={callerUid} endCallFunc={endCallFunc} startCallFunc={startCallFunc}/>
+            <DialogComponent isOpen={isOpen} onClose={() => close(true)} isMinimized={isMinimized} >
+                <CallRoom 
+                    myUid={myUid}
+                    calleeUid={callerUid} 
+                    endCallFunc={endCallFunc} 
+                    startCallFunc={startCallFunc}
+                    toggleMinimize={toggleMinimize}
+                    isMinimized={isMinimized}
+                />
             </DialogComponent>
         </div>
     )

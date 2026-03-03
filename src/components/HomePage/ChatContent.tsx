@@ -50,7 +50,8 @@ const OnlineStatusComponent: FC = () => {
 
 const CallButton: FC<{ isChannel: boolean, callerUid: string }> = ({ isChannel, callerUid }) => {
 
-    const isShow = useAppSelector(state => state.app.showCheckbox)
+    const isShowCheckbox = useAppSelector(state => state.app.showCheckbox)
+    const isOpen = useAppSelector(state => state.calls.isOpen)
     const isFavorites = useAppSelector(state => state.app.isFavorites)
     const caller = useAppSelector(state => state.app.currentUser)
     const callee = useAppSelector(state => state.app.selectedChat)
@@ -65,7 +66,7 @@ const CallButton: FC<{ isChannel: boolean, callerUid: string }> = ({ isChannel, 
         }))
     }
 
-    if (isShow || isChannel || isFavorites) return null
+    if (isOpen || isShowCheckbox || isChannel || isFavorites) return null
 
     return (
         <div className={styles.contentHeader__callButton}>

@@ -17,6 +17,16 @@
         text-align: center;
     }
 
+    .minimized {
+        display: flex;
+        justify-content: end;
+        color: var(--color);
+        cursor: pointer;
+        &:hover {
+            color: rgb(135, 116, 225);
+        }
+    }
+
     .buttons {
         display: flex;
         justify-content: space-around;
@@ -24,6 +34,9 @@
 
         & button {
             min-width: 100px;
+            &:hover {
+                opacity: 0.9;
+            }
         }
 
         &__settings {
@@ -36,11 +49,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            
+
             & svg {
                 color: var(--color-svg);
             }
-            
         }
     }
 
@@ -55,5 +67,128 @@
         text-align: center;
         font-size: 1rem;
         color: var(--color);
+    }
+}
+
+// .customWidget {
+//     background: var(--glass-bg);
+//     border: 1px solid var(--glass-border);
+//     backdrop-filter: blur(12px) saturate(180%);
+//     -webkit-backdrop-filter: blur(12px) saturate(180%);
+//     border-radius: 16px;
+//     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+//     transition: background 0.3s ease, box-shadow 0.3s ease;
+//     position: fixed;
+//     bottom: 20px; 
+//     left: 50%;
+//     transform: translateX(-50%);
+//     z-index: 99999;
+//     color: var(--color);
+//     padding: 12px 18px;
+//     border-radius: 16px;
+//     display: flex;
+//     align-items: center;
+//     gap: 20px;
+//     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+//     border: 1px solid rgba(255, 255, 255, 0.1);
+//     animation: slideUp 1s ease-out;
+//     cursor: grab;
+//     white-space: nowrap;
+
+//     &:active {
+//         cursor: grabbing;
+//     }
+
+//     &:hover {
+//         background: var(--glass-bg-hover);
+//         box-shadow:
+//             0 6px 24px rgba(0, 0, 0, 0.6),
+//             inset 0 0 12px var(--glass-highlight);
+//     }
+
+//     & svg {
+//         cursor: pointer;
+//     }
+
+//     & button:hover {
+//         opacity: 0.9;
+//     }
+
+//     &__expandButton {
+//         font-size: 1.2rem;
+//         transform: rotateX(180deg);
+//         margin-bottom: 8px;
+//     }
+// }
+
+// @keyframes slideUp {
+//     from {
+//         opacity: 0;
+//         transform: translate(-50%, 40px);
+//     }
+//     to {
+//         opacity: 1;
+//         transform: translate(-50%, 0);
+//     }
+// }
+
+.customWidget {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    color: var(--color);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 99999;
+    
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    max-width: 90vw;
+
+    &:active {
+        cursor: grabbing;
+    }
+
+    animation: slideUpCenter 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: background 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+
+    & button:hover {
+        opacity: 0.9;
+    }
+
+    &__expandButton {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        font-size: 1.2rem;
+        transform: rotateX(180deg);
+        margin-bottom: 8px;
+        padding: 5px;
+    }
+
+    & .buttons__settings {
+        cursor: pointer;
+    }
+}
+
+@keyframes slideUpCenter {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 40px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
     }
 }
